@@ -5,32 +5,36 @@
 <script>
     let userId = '';
     let password = '';
-
-    const url = 'http://localhost:3000'
+    let email = '';
   
-    async function login(event) {
-        event.preventDefault();      
+    const url = 'http://localhost:3000'
+
+    async function handleSubmit(event) {
+      event.preventDefault();
         try {
-            const res = await fetch(`${url}/login`, {
+            const res = await fetch(`${url}/register`, {
               method: 'POST',              
-              body: JSON.stringify({userId, password}),
+              body: JSON.stringify({userId, password, email}),
               headers: {
                 'Content-Type': 'application/json'
               }
             })
-            if(res.status !== 201)
+            console.log(res.status);
+            if(res.status !== 204)
               throw res.status
-            //TODO save JTW that you receive in the response
-            location.href = '/app';
+            alert("registrazione effettuata")
+            location.href = '/';
         } catch (error) {
             console.log(error);
             //TODO
-            alert('Wrong password')
+            alert(error)
         }
     }
+    
+  
 </script>
 
-<form on:submit={login}>
+<form on:submit={handleSubmit}>
     <div>
       <label>
         User ID:
@@ -43,11 +47,17 @@
         <input type="password" bind:value={password} />
       </label>
     </div>
-    <button type="submit">Accedi</button>
+    <div>
+      <label>
+        Email:
+        <input type="text" bind:value={email} />
+      </label>
+    </div>
+    
+    <button type="submit">Registrati</button>
     <nav>
         <ul>
-          <li><a href="/register">Non sei ancora registrato?</a></li>
-          <li><a href="/resetpassword">Password dimenticata?</a></li>
+          <li><a href="/">Sei già registrato?</a></li>
         </ul>
     </nav>
 </form>
